@@ -1,4 +1,4 @@
-<?php namespace Ionix;
+<?php namespace Ionix\Router;
 
 class Route {
 
@@ -34,7 +34,7 @@ class Route {
      */
     public function matches($requestUri)
     {
-        if (preg_match('#'.$this->name.'#i', $requestUri)) {
+        if (preg_match('#'.preg_quote($this->name, '#').'#i', $requestUri, $out)) {
             return true;
         }
 
@@ -47,7 +47,7 @@ class Route {
      */
     public function getCallback()
     {
-        if (is_callable($this->name)) {
+        if (is_callable($this->callback)) {
             return $this->callback;
         }
 
@@ -71,31 +71,6 @@ class Route {
         }
 
         return $callback;
-    }
-
-    /**
-     * @var array
-     */
-    protected static $routes = [];
-
-    /**
-     * @param $name
-     * @param $callback
-     * @return mixed
-     */
-    public static function get($name, $callback)
-    {
-        return self::$routes[$name] = new Route($name, $callback);
-    }
-
-    /**
-     * Get all created routes
-     *
-     * @return array
-     */
-    public static function all()
-    {
-        return self::$routes;
     }
 
 }

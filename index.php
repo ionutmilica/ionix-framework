@@ -19,6 +19,11 @@ $app->addDirectories([
 
 $app->register();
 
-$route = Route::get('test/(.*?)/x', 'HomeController@index');
-var_dump($route->matches('test/22/x'));
-var_dump($route->getCallBack());
+
+$router = new \Ionix\Router\Router();
+$router->get('test', 'HomeController@index');
+$router->get('/', function () {
+    echo '<h1>Home !</h1>';
+});
+
+$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
