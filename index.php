@@ -1,13 +1,15 @@
 <?php
 
+use Ionix\Route;
+
 define('DS', DIRECTORY_SEPARATOR);
-define('ROOT', dirname(__FILE__) . DS);
-define('APP', ROOT . 'app' . DS);
-define('CORE', ROOT . 'Core' . DS);
+define('ROOT', __DIR__ . DS);
+define('APP', __DIR__ . '/app' . DS);
+define('CORE',__DIR__ . '/Ionix' . DS);
 
-require CORE . 'Ionix.php';
+require 'vendor/autoload.php';
 
-$app = new Core\Ionix();
+$app = new Ionix\App();
 
 $app->addDirectories([
     ROOT,
@@ -17,6 +19,6 @@ $app->addDirectories([
 
 $app->register();
 
-$route = Core\Route::get('test/(.*?)/x', 'HomeController@index');
+$route = Route::get('test/(.*?)/x', 'HomeController@index');
 var_dump($route->matches('test/22/x'));
 var_dump($route->getCallBack());

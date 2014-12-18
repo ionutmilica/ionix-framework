@@ -1,6 +1,6 @@
-<?php namespace Core;
+<?php namespace Ionix;
 
-class Ionix {
+class App {
 	
 	protected $classes = [];
 	protected $directories = [];

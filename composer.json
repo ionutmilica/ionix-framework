@@ -1,0 +1,22 @@
+{
+  "name": "ionutmilica/ionix",
+  "type": "project",
+  "description": "A slim framwork.",
+  "keywords": ["framework"],
+  "homepage": "http://ionutmilica.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ionut Milica",
+      "email": "ionut.milica@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ionix\\": "vendor/Ionix/"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-<?php namespace Core;
+<?php namespace Ionix;
 
 class Route {
 
@@ -29,12 +29,12 @@ class Route {
     /**
      * Check if a route matches a given url
      *
-     * @param $path
+     * @param $requestUri
      * @return bool
      */
-    public function matches($path)
+    public function matches($requestUri)
     {
-        if (preg_match('#'.$this->name.'#i', $path)) {
+        if (preg_match('#'.$this->name.'#i', $requestUri)) {
             return true;
         }
 
