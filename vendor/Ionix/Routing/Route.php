@@ -83,8 +83,7 @@ class Route {
     {
         $regex = $this->compile();
 
-        if (preg_match('#^'.$regex.'$#i', $requestUri, $out)) {
-            var_dump($out);
+        if (preg_match('#'.$regex.'$#i', $requestUri, $out)) {
             return true;
         }
 

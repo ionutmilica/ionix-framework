@@ -70,6 +70,8 @@ class Router {
      */
     public function dispatch($method, $requestUri)
     {
+        $requestUri = trim($requestUri, '/');
+
         $route = $this->routes->find($method, $requestUri);
 
         if ( ! $route) {
