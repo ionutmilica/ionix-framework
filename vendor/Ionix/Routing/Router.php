@@ -61,6 +61,17 @@ class Router {
     }
 
     /**
+     * Set a pattern to the routes
+     *
+     * @param $name
+     * @param $value
+     */
+    public function pattern($name, $value)
+    {
+        Route::pattern($name, $value);
+    }
+
+    /**
      * For a specific method and uri, dispatch the route.
      *
      * @param $method
@@ -77,6 +88,6 @@ class Router {
             return false;
         }
 
-        call_user_func_array($route->getCallBack(), $route->getData());
+        return call_user_func_array($route->getCallBack(), $route->getData());
     }
 }

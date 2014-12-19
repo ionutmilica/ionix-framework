@@ -27,6 +27,11 @@ class Route {
     protected $wheres = [];
 
     /**
+     * @var array
+     */
+    protected static $patterns = [];
+
+    /**
      * @param $name
      * @param $callback
      */
@@ -50,7 +55,7 @@ class Route {
         foreach ($out[0] as $i => $var) {
             $format = '(?P<%s>%s)%s';
             $name   = str_replace('?', '', $out[1][$i]);
-            $regex  = isset($this->wheres[$name]) ? $this->wheres[$name] : '.*';
+            $regex  = $this->getWhere($name) ?: '.*';
             $opt    = '';
 
             if (substr($var, -2, 1) == '?') {
@@ -65,12 +70,42 @@ class Route {
     }
 
     /**
+     * Get conditional pattern for route variables
+     *
+     * @param $name
+     * @return bool
+     */
+    protected function getWhere($name)
+    {
+        if (isset($this->wheres[$name])) {
+            return $this->wheres[$name];
+        }
+
+        if (isset(self::$patterns[$name])) {
+            return self::$patterns[$name];
+        }
+
+        return false;
+    }
+
+    /**
      * @param $name
      * @param $regex
      */
     public function where($name, $regex)
     {
         $this->wheres[$name] = $regex;
+    }
+
+    /**
+     * Set pattern for all the routes
+     *
+     * @param $name
+     * @param $regex
+     */
+    public static function pattern($name, $regex)
+    {
+        self::$patterns[$name] = $regex;
     }
 
     /**

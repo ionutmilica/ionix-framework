@@ -18,8 +18,9 @@ $app->addDirectories([
 $app->register();
 
 $router = new \Ionix\Routing\Router();
+$router->pattern('name', '[0-9]+');
 $router->get('test/{id?}', 'HomeController@index')->where('id', '[0-9]+');
 $router->get('shop/{name}/{other}/{id}', 'HomeCOntroller@index');
 $router->get('shop/{name?}', 'HomeCOntroller@index');
 
-$router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+echo $router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
