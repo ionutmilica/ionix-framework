@@ -1,4 +1,4 @@
-<?php namespace Ionix;
+<?php namespace Ionix\Routing;
 
 abstract class Controller {
 

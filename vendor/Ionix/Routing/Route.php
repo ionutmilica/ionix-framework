@@ -1,4 +1,4 @@
-<?php namespace Ionix\Router;
+<?php namespace Ionix\Routing;
 
 class Route {
 
@@ -83,7 +83,7 @@ class Route {
     {
         $regex = $this->compile();
 
-        if (preg_match('#'.$regex.'#i', $requestUri, $out)) {
+        if (preg_match('#^'.$regex.'$#i', $requestUri, $out)) {
             var_dump($out);
             return true;
         }

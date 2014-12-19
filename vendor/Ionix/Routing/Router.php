@@ -1,4 +1,4 @@
-<?php namespace Ionix\Router;
+<?php namespace Ionix\Routing;
 
 class Router {
 

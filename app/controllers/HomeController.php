@@ -1,6 +1,6 @@
 <?php
 
-use Ionix\Controller;
+use Ionix\Routing\Controller;
 
 class HomeController extends Controller {
 
