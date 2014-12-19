@@ -8,11 +8,6 @@ class App extends Container {
 	protected $directories = [];
 	protected $pages;
 
-
-	public function __construct()
-	{
-	}
-
 	/**
 	 * Add new directories for auto-loader to search in.
 	 *
@@ -44,6 +39,9 @@ class App extends Container {
 		}
 	}
 
+	/**
+	 * Register all the providers
+	 */
 	public function registerProviders()
 	{
 		$appConfig = $this['path.app'] . 'config/app.php';
@@ -75,5 +73,13 @@ class App extends Container {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Run the application
+	 */
+	public function run()
+	{
+		return $this['router']->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 	}
 }

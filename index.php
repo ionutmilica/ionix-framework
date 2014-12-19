@@ -37,4 +37,4 @@ $app['router']->get('test/{id?}', 'HomeController@index')->where('id', '[0-9]+')
 $app['router']->get('shop/{name}/{other}/{id}', 'HomeCOntroller@index');
 $app['router']->get('shop/{name?}', 'HomeController@index');
 
-echo $app['router']->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+echo $app->run();
