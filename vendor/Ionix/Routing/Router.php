@@ -100,6 +100,7 @@ class Router {
         }
 
         $callback = $route->getCallback();
+        $data     = array_values($route->getData());
 
         if (is_array($callback)) {
             $reflClass = new \ReflectionClass($callback[0]);
@@ -113,6 +114,21 @@ class Router {
             }
 
             $callback[0] = $reflClass->newInstanceArgs($paramList);
+            // Injection on methods
+            $method = $reflClass->getMethod($callback[1]);
+
+            $params = $method->getParameters();
+            $paramList = [];
+            $i = 0;
+            foreach ($params as $param) {
+                $class = $param->getClass();
+                if ($class) {
+                    $paramList[] = $this->getFromContainer($this->app, $class->getName());
+                } else {
+                    $paramList[] = $data[$i++];
+                }
+            }
+            return $method->invokeArgs($callback[0], $paramList);
         }
 
         return call_user_func_array($callback, $route->getData());
