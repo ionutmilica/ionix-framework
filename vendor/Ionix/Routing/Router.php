@@ -78,6 +78,6 @@ class Router {
             return false;
         }
 
-        call_user_func_array($route->getCallBack(), []);
+        call_user_func_array($route->getCallBack(), $route->getData());
     }
 }

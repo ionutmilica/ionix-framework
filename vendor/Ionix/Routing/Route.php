@@ -19,7 +19,7 @@ class Route {
     /**
      * @var
      */
-    protected $regex;
+    protected $data = [];
 
     /**
      * @var array
@@ -53,7 +53,7 @@ class Route {
             $regex  = isset($this->wheres[$name]) ? $this->wheres[$name] : '.*';
             $opt    = '';
 
-            if (substr($var, -2, 1)) {
+            if (substr($var, -2, 1) == '?') {
                 $opt = '?';
                 $compiled = str_replace('/'.$var, '/?'.$var, $compiled);
             }
@@ -84,10 +84,28 @@ class Route {
         $regex = $this->compile();
 
         if (preg_match('#'.$regex.'$#i', $requestUri, $out)) {
+            $this->data = $this->getOnlyStringKeys($out);
+
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Get arrays elements that contains only associative keys
+     *
+     * @param array $array
+     * @return array
+     */
+    protected function getOnlyStringKeys(array $array)
+    {
+        $allowed = array_filter(array_keys($array), function ($key)
+        {
+            return ! is_int($key);
+        });
+
+        return array_intersect_key($array, array_flip($allowed));
     }
 
     /**
@@ -101,6 +119,16 @@ class Route {
         }
 
         return $this->resolveCallback($this->callback);
+    }
+
+    /**
+     * Get mached url parts
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
