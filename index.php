@@ -1,7 +1,5 @@
 <?php
 
-use Ionix\Route;
-
 define('DS', DIRECTORY_SEPARATOR);
 define('ROOT', __DIR__ . DS);
 define('APP', __DIR__ . '/app' . DS);
@@ -19,11 +17,9 @@ $app->addDirectories([
 
 $app->register();
 
-
 $router = new \Ionix\Router\Router();
-$router->get('test', 'HomeController@index');
-$router->get('/', function () {
-    echo '<h1>Home !</h1>';
-});
+$router->get('test/{id?}', 'HomeController@index')->where('id', '[0-9]+');
+$router->get('shop/{name?}', 'HomeCOntroller@index');
+$router->get('shop/{name}/{other}/{id}', 'HomeCOntroller@index');
 
-$router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));

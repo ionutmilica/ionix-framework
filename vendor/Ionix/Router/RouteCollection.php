@@ -9,10 +9,11 @@ class RouteCollection {
      *
      * @param $method
      * @param Route $route
+     * @return Route
      */
     public function addRoute($method, Route $route)
     {
-        $this->routes[$method][] = $route;
+        return $this->routes[$method][] = $route;
     }
 
     /**

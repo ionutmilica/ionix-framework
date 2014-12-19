@@ -14,7 +14,17 @@ class Route {
      *
      * @var
      */
-    protected $name;
+    protected $format;
+
+    /**
+     * @var
+     */
+    protected $regex;
+
+    /**
+     * @var array
+     */
+    protected $wheres = [];
 
     /**
      * @param $name
@@ -22,8 +32,45 @@ class Route {
      */
     public function __construct($name, $callback)
     {
-        $this->name = $name;
+        $this->regex = $this->format = $name;
         $this->callback = $callback;
+    }
+
+    /**
+     * Compile route
+     *
+     * @return mixed|string
+     */
+    public function compile()
+    {
+        preg_match_all('#{(.*?)}#i', $this->format, $out);
+
+        $compiled = $this->format;
+
+        foreach ($out[0] as $i => $var) {
+            $format = '(?P<%s>%s)%s';
+            $name   = str_replace('?', '', $out[1][$i]);
+            $regex  = isset($this->wheres[$name]) ? $this->wheres[$name] : '.*';
+            $opt    = '';
+
+            if (substr($var, -2, 1)) {
+                $opt = '?';
+                $compiled = str_replace('/'.$var, '/?'.$var, $compiled);
+            }
+
+            $compiled = str_replace($var, sprintf($format, $name, $regex, $opt), $compiled);
+        }
+
+        return $compiled;
+    }
+
+    /**
+     * @param $name
+     * @param $regex
+     */
+    public function where($name, $regex)
+    {
+        $this->wheres[$name] = $regex;
     }
 
     /**
@@ -34,7 +81,10 @@ class Route {
      */
     public function matches($requestUri)
     {
-        if (preg_match('#'.preg_quote($this->name, '#').'#i', $requestUri, $out)) {
+        $regex = $this->compile();
+
+        if (preg_match('#'.$regex.'#i', $requestUri, $out)) {
+            var_dump($out);
             return true;
         }
 

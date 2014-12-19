@@ -21,10 +21,11 @@ class Router {
      *
      * @param $route
      * @param $callback
+     * @return Route
      */
     public function get($route, $callback)
     {
-        $this->routes->addRoute(self::GET, new Route(
+        return $this->routes->addRoute(self::GET, new Route(
             $route,
             $callback
         ));
@@ -35,10 +36,11 @@ class Router {
      *
      * @param $route
      * @param $callback
+     * @return Route
      */
     public function post($route, $callback)
     {
-        $this->routes->addRoute(self::POST, new Route(
+        return $this->routes->addRoute(self::POST, new Route(
             $route,
             $callback
         ));
@@ -49,10 +51,11 @@ class Router {
      *
      * @param $route
      * @param $callback
+     * @return Route
      */
     public function delete($route, $callback)
     {
-        $this->routes->addRoute(self::DELETE, new Route(
+        return $this->routes->addRoute(self::DELETE, new Route(
             $route,
             $callback
         ));
