@@ -7,20 +7,34 @@ define('CORE',__DIR__ . '/Ionix' . DS);
 
 require 'vendor/autoload.php';
 
-$app = new Ionix\App();
+$app = new Ionix\Foundation\App();
+
+$app->setPaths([
+    'path.root' => ROOT,
+    'path.app'  => APP,
+]);
 
 $app->addDirectories([
-    ROOT,
     APP.'controllers',
     APP.'models',
 ]);
 
-$app->register();
+$app->init();
 
-$router = new \Ionix\Routing\Router();
-$router->pattern('name', '[0-9]+');
-$router->get('test/{id?}', 'HomeController@index')->where('id', '[0-9]+');
-$router->get('shop/{name}/{other}/{id}', 'HomeCOntroller@index');
-$router->get('shop/{name?}', 'HomeCOntroller@index');
+/*
 
-echo $router->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$rfl = new ReflectionClass('HomeController');
+$params = $rfl->getConstructor()->getParameters();
+foreach ($params as $param)
+{
+    var_dump($param->getClass());
+}
+
+exit; */
+
+$app['router']->pattern('name', '[0-9]+');
+$app['router']->get('test/{id?}', 'HomeController@index')->where('id', '[0-9]+');
+$app['router']->get('shop/{name}/{other}/{id}', 'HomeCOntroller@index');
+$app['router']->get('shop/{name?}', 'HomeController@index');
+
+echo $app['router']->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));

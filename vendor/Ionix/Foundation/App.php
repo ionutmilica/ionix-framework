@@ -1,6 +1,8 @@
-<?php namespace Ionix;
+<?php namespace Ionix\Foundation;
 
-class App {
+use Pimple\Container;
+
+class App extends Container {
 	
 	protected $classes = [];
 	protected $directories = [];
@@ -24,9 +26,33 @@ class App {
 	/**
 	 * Register the auto-loader
 	 */
-	public function register()
+	public function init()
 	{
 		spl_autoload_register(array($this, 'load'));
+		$this->registerProviders();
+	}
+
+	/**
+	 * Set app paths
+	 *
+	 * @param array $paths
+	 */
+	public function setPaths(array $paths)
+	{
+		foreach ($paths as $key => $path) {
+			$this[$key] = $path;
+		}
+	}
+
+	public function registerProviders()
+	{
+		$appConfig = $this['path.app'] . 'config/app.php';
+
+		$app = require $appConfig;
+
+		foreach ($app['providers'] as $provider) {
+			(new $provider($this))->register();
+		}
 	}
 
 	/**
