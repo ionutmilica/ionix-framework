@@ -8,12 +8,11 @@ class Router {
     const PATCH = 'PATCH';
     const DELETE = 'DELETE';
 
-    protected $routes;
+    protected $collection;
 
     public function __construct()
     {
-        // Dependency injection in the future
-        $this->routes = new RouteCollection();
+        $this->collection = new RouteCollection();
     }
 
     /**
@@ -25,7 +24,7 @@ class Router {
      */
     public function get($route, $callback)
     {
-        return $this->routes->addRoute(self::GET, new Route(
+        return $this->collection->addRoute(self::GET, new Route(
             $route,
             $callback
         ));
@@ -40,7 +39,7 @@ class Router {
      */
     public function post($route, $callback)
     {
-        return $this->routes->addRoute(self::POST, new Route(
+        return $this->collection->addRoute(self::POST, new Route(
             $route,
             $callback
         ));
@@ -55,7 +54,7 @@ class Router {
      */
     public function delete($route, $callback)
     {
-        return $this->routes->addRoute(self::DELETE, new Route(
+        return $this->collection->addRoute(self::DELETE, new Route(
             $route,
             $callback
         ));
@@ -72,7 +71,7 @@ class Router {
     {
         $requestUri = trim($requestUri, '/');
 
-        $route = $this->routes->find($method, $requestUri);
+        $route = $this->collection->find($method, $requestUri);
 
         if ( ! $route) {
             return false;
