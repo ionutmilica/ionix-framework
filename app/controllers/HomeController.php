@@ -9,9 +9,8 @@ class HomeController extends Controller {
         var_dump($model);
     }
 
-    public function index($t, \Ionix\Foundation\App $a1, $r, $s, \Ionix\Foundation\App $a2)
+    public function index()
     {
-        var_dump($t, $a1, $r, $s, $a2);
         echo 'It works !';
     }
 }
