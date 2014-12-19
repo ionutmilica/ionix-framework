@@ -177,7 +177,7 @@ class Route {
         if (stripos($callback, '@') !== false) {
             list($controller, $action) = explode('@', $callback);
             return [
-                new $controller,
+                $controller,
                 $action
             ];
         }

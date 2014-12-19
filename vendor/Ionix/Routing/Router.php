@@ -1,5 +1,7 @@
 <?php namespace Ionix\Routing;
 
+use Ionix\Foundation\App;
+
 class Router {
 
     const GET = 'GET';
@@ -8,10 +10,19 @@ class Router {
     const PATCH = 'PATCH';
     const DELETE = 'DELETE';
 
-    protected $collection;
+    /**
+     * @var RouteCollection
+     */
 
-    public function __construct()
+    protected $collection;
+    /**
+     * @var App
+     */
+    protected $app;
+
+    public function __construct(App $app)
     {
+        $this->app = $app;
         $this->collection = new RouteCollection();
     }
 
@@ -88,6 +99,40 @@ class Router {
             return false;
         }
 
-        return call_user_func_array($route->getCallBack(), $route->getData());
+        $callback = $route->getCallback();
+
+        if (is_array($callback)) {
+            $reflClass = new \ReflectionClass($callback[0]);
+            $params = $reflClass->getConstructor()->getParameters();
+            $paramList = [];
+            foreach ($params as $param) {
+                $class = $param->getClass();
+                if ($class) {
+                    $paramList[] = $this->getFromContainer($this->app, $class->getName());
+                }
+            }
+
+            $callback[0] = $reflClass->newInstanceArgs($paramList);
+        }
+
+        return call_user_func_array($callback, $route->getData());
+    }
+
+    /**
+     * Search in container for a specific type or create a new class.
+     * More validation to be done
+     *
+     * @param App $app
+     * @param $type
+     * @return mixed
+     */
+    public function getFromContainer(App $app, $type)
+    {
+        foreach ($app as $obj) {
+            if (($obj instanceof $type) !== false) {
+                return $obj;
+            }
+        }
+        return new $type;
     }
 }
