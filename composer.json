@@ -18,6 +18,9 @@
   "autoload": {
     "psr-4": {
       "Ionix\\": "vendor/Ionix/"
-    }
+    },
+    "files": [
+      "vendor/Ionix/Foundation/helpers.php"
+    ]
   }
 }

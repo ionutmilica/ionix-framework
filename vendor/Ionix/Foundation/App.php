@@ -3,10 +3,16 @@
 use Pimple\Container;
 
 class App extends Container {
-	
-	protected $classes = [];
+
+	/**
+	 * @var array
+	 */
 	protected $directories = [];
-	protected $pages;
+
+	/**
+	 * @var
+	 */
+	protected static $app;
 
 	/**
 	 * Add new directories for auto-loader to search in.
@@ -23,7 +29,10 @@ class App extends Container {
 	 */
 	public function init()
 	{
+		self::setApp($this);
+
 		spl_autoload_register(array($this, 'load'));
+
 		$this->registerProviders();
 	}
 
@@ -81,5 +90,25 @@ class App extends Container {
 	public function run()
 	{
 		return $this['router']->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+	}
+
+	/**
+	 * Store the app instance in a static context
+	 *
+	 * @param App $app
+	 */
+	public static function setApp(App $app)
+	{
+		self::$app= $app;
+	}
+
+	/**
+	 * Get app instance from the static context
+	 *
+	 * @return mixed
+	 */
+	public static function getApp()
+	{
+		return self::$app;
 	}
 }
