@@ -1,5 +1,6 @@
 <?php namespace Ionix\Foundation;
 
+use Ionix\Http\Request;
 use Pimple\Container;
 
 class App extends Container {
@@ -59,7 +60,7 @@ class App extends Container {
 	 */
 	public function run()
 	{
-		return $this['router']->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+		return $this['router']->dispatch($this['request']);
 	}
 
 	/**

@@ -116,15 +116,36 @@ class Route {
      */
     public function matches($requestUri)
     {
+        $requestUri = $this->normalizeUri($requestUri);
         $regex = $this->compile();
 
-        if (preg_match('#'.$regex.'$#i', $requestUri, $out)) {
+        if (preg_match('#^'.$regex.'$#i', $requestUri, $out)) {
             $this->data = $this->getOnlyStringKeys($out);
-
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Prepare uri for regex match
+     *
+     * @param $requestUri
+     * @return string
+     */
+    protected function normalizeUri($requestUri)
+    {
+        $len = strlen($requestUri);
+
+        if ($len == 0) {
+            return '/';
+        }
+
+        if ($len == 1) {
+            return $requestUri;
+        }
+
+        return trim($requestUri, '/');
     }
 
     /**

@@ -2,11 +2,40 @@
 
 class Request {
 
-    private $query;
-    private $post;
-    private $cookie;
-    private $files;
-    private $server;
+    /**
+     * @var ParamBag
+     */
+    public $query;
+
+    /**
+     * @var ParamBag
+     */
+    public $post;
+
+    /**
+     * @var ParamBag
+     */
+    public $cookie;
+
+    /**
+     * @var ParamBag
+     */
+    public $files;
+
+    /**
+     * @var ParamBag
+     */
+    public $server;
+
+    /**
+     * @var string
+     */
+    protected $pathInfo;
+
+    /**
+     * @var string
+     */
+    protected $method;
 
     /**
      * @param $get
@@ -36,6 +65,9 @@ class Request {
         $this->cookie = new ParamBag($cookie);
         $this->files = new ParamBag($files);
         $this->server = new ParamBag($server);
+
+        $this->method = null;
+        $this->pathInfo = null;
     }
 
     /**
@@ -46,5 +78,31 @@ class Request {
     public static function createFromGlobals()
     {
         return new static($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
+    }
+
+    /**
+     * Get path info
+     * Ex: http://localhost/ionix/test => /test
+     *     http://localhost/ionix      => /
+     */
+    public function getPathInfo()
+    {
+        if ($this->pathInfo == null) {
+            $this->pathInfo = $this->server->get('PATH_INFO') ?: '/';
+        }
+
+        return $this->pathInfo;
+    }
+
+    /**
+     * Get method
+     */
+    public function getMethod()
+    {
+        if ($this->method == null) {
+            $this->method = strtoupper($this->server->get('REQUEST_METHOD', 'GET'));
+        }
+
+        return $this->method;
     }
 }

@@ -1,6 +1,7 @@
 <?php namespace Ionix\Routing;
 
 use Ionix\Foundation\App;
+use Ionix\Http\Request;
 
 class Router {
 
@@ -85,15 +86,15 @@ class Router {
     /**
      * For a specific method and uri, dispatch the route.
      *
-     * @param $method
-     * @param $requestUri
+     * @param Request $request
      * @return bool
      */
-    public function dispatch($method, $requestUri)
+    public function dispatch(Request $request)
     {
-        $requestUri = trim($requestUri, '/');
+        $pathInfo = rtrim($request->getPathInfo(), '/');
+        $method   = $request->getMethod();
 
-        $route = $this->collection->find($method, $requestUri);
+        $route = $this->collection->find($method, $pathInfo);
 
         if ( ! $route) {
             return false;
@@ -124,7 +125,7 @@ class Router {
                 $class = $param->getClass();
                 if ($class) {
                     $paramList[] = $this->getFromContainer($this->app, $class->getName());
-                } else {
+                } else if (isset($data[$i])) {
                     $paramList[] = $data[$i++];
                 }
             }

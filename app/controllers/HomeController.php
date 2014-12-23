@@ -11,6 +11,21 @@ class HomeController extends Controller {
 
     public function index()
     {
-        echo 'It works !';
+        echo 'Index: It works !';
+    }
+
+    public function a($x, $y, $z)
+    {
+        var_dump($x, $y, $z);
+    }
+
+    public function b($zz)
+    {
+        var_dump($zz);
+    }
+
+    public function c($t = null)
+    {
+        var_dump($t);
     }
 }

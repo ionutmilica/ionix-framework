@@ -19,6 +19,8 @@ $app['loader']->addDirectories([
     APP.'models',
 ]);
 
+$app['request'] = \Ionix\Http\Request::createFromGlobals();
+
 $app->init();
 
 require APP . 'routes.php';
