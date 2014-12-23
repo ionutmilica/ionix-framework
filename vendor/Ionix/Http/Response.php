@@ -8,7 +8,7 @@ class Response
      *
      * @var ParamBag
      */
-    protected $headers;
+    public $headers;
 
     /**
      * The content that will be echoed
@@ -34,6 +34,19 @@ class Response
         $this->setContent($content);
         $this->setStatusCode($status);
         $this->headers = new ParamBag($headers);
+    }
+
+    /**
+     * Creates a new request
+     *
+     * @param $content
+     * @param int $status
+     * @param array $headers
+     * @return static
+     */
+    public static function make($content, $status = 200, $headers = [])
+    {
+        return new static($content, $status, $headers);
     }
 
     /**

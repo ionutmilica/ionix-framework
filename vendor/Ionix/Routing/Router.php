@@ -2,6 +2,7 @@
 
 use Ionix\Foundation\App;
 use Ionix\Http\Request;
+use Ionix\Http\Response;
 
 class Router {
 

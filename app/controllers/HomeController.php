@@ -1,17 +1,13 @@
 <?php
 
+use Ionix\Http\Response;
 use Ionix\Routing\Controller;
 
 class HomeController extends Controller {
-
-    public function __construct(TestModel $model)
-    {
-        var_dump($model);
-    }
-
+    
     public function index()
     {
-        echo 'Index: It works !';
+        return Response::make('<h1>Hello world !</h1>');
     }
 
     public function a($x, $y, $z)

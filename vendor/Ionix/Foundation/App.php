@@ -1,6 +1,7 @@
 <?php namespace Ionix\Foundation;
 
 use Ionix\Http\Request;
+use Ionix\Http\Response;
 use Pimple\Container;
 
 class App extends Container {
@@ -60,7 +61,14 @@ class App extends Container {
 	 */
 	public function run()
 	{
-		return $this['router']->dispatch($this['request']);
+		$request = Request::createFromGlobals();
+		$response = $this['router']->dispatch($request);
+
+		if (true == ($response instanceof Response)) {
+			$response->send();
+		} else {
+			echo $response;
+		}
 	}
 
 	/**
