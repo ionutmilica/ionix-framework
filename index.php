@@ -14,7 +14,7 @@ $app->setPaths([
     'path.app'  => APP,
 ]);
 
-$app->addDirectories([
+$app['loader']->addDirectories([
     APP.'controllers',
     APP.'models',
 ]);

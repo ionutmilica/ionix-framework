@@ -5,23 +5,15 @@ use Pimple\Container;
 class App extends Container {
 
 	/**
-	 * @var array
-	 */
-	protected $directories = [];
-
-	/**
 	 * @var
 	 */
 	protected static $app;
 
-	/**
-	 * Add new directories for auto-loader to search in.
-	 *
-	 * @param $directories
-	 */
-	public function addDirectories($directories)
+	public function __construct()
 	{
-		$this->directories = array_unique(array_merge($this->directories, $directories));
+		parent::__construct();
+
+		$this->initDefaultClasses();
 	}
 
 	/**
@@ -31,7 +23,7 @@ class App extends Container {
 	{
 		self::setApp($this);
 
-		spl_autoload_register(array($this, 'load'));
+		spl_autoload_register(array($this['loader'], 'load'));
 
 		$this->registerProviders();
 	}
@@ -63,28 +55,6 @@ class App extends Container {
 	}
 
 	/**
-	 * Search and load a specific class. Used for auto-loader.
-	 *
-	 * @param $class
-	 * @return bool
-	 */
-	public function load($class)
-	{
-		if ($class[0] == '\\') $class = substr($class, 1);
-		$class = str_replace(array('\\', '_'), DIRECTORY_SEPARATOR, $class).'.php';
-
-		foreach ($this->directories as $directory)
-		{
-			if (file_exists($path = $directory.DIRECTORY_SEPARATOR.$class))
-			{
-				require_once $path;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Run the application
 	 */
 	public function run()
@@ -110,5 +80,15 @@ class App extends Container {
 	public static function getApp()
 	{
 		return self::$app;
+	}
+
+	/**
+	 * Init default classes used by the application
+	 */
+	private function initDefaultClasses()
+	{
+		$this['loader'] = function ($app) {
+			return new ClassLoader();
+		};
 	}
 }
