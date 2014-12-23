@@ -5,13 +5,7 @@ use Ionix\Routing\Controller;
 
 class HomeController extends Controller {
 
-    public function __construct(Test $test)
-    {
-        echo 'Yay !';
-        var_dump($test);
-    }
-
-    public function index(Test $sd)
+    public function index()
     {
         return Response::make('<h1>Hello world !</h1>');
     }
@@ -21,13 +15,13 @@ class HomeController extends Controller {
         var_dump($x, $y, $z);
     }
 
-    public function b(Test $mm, $zz)
+    public function b($zz)
     {
-        var_dump($mm, $zz);
+        var_dump($zz);
     }
 
-    public function c(Test $zz, $t = null, Test $mm)
+    public function c($t = null)
     {
-        var_dump($t, $mm);
+        var_dump($t);
     }
 }
