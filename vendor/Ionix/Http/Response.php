@@ -1,5 +1,7 @@
 <?php namespace Ionix\Http;
 
+use ArrayObject;
+
 class Response
 {
 
@@ -56,7 +58,33 @@ class Response
      */
     public function setContent($content)
     {
+        if ($this->shouldBeJson($content)) {
+            $content = $this->toJson($content);
+        }
+
         $this->content = $content;
+    }
+
+    /**
+     * Check if content should be converted to json
+     *
+     * @param $content
+     * @return bool
+     */
+    public function shouldBeJson($content)
+    {
+        return is_array($content) || $content instanceof ArrayObject;
+    }
+
+    /**
+     * Transform array or Jsonable objects to json
+     *
+     * @param $content
+     * @return string
+     */
+    public function toJson($content)
+    {
+        return json_encode($content);
     }
 
     /**

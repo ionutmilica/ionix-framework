@@ -17,11 +17,12 @@ class HomeController extends Controller {
 
     public function b($zz)
     {
-        var_dump($zz);
+        var_dump('B:'.$zz);
     }
 
     public function c($t = null)
     {
-        var_dump($t);
+        var_dump('C:'.$t);
+        return ['Test', 'Adsa'];
     }
 }

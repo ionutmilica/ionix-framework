@@ -67,7 +67,7 @@ class App extends Container {
 		if (true == ($response instanceof Response)) {
 			$response->send();
 		} else {
-			echo $response;
+			(new Response($response))->send();
 		}
 	}
 
