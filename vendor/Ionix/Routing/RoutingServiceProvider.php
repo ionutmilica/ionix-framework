@@ -13,7 +13,7 @@ class RoutingServiceProvider extends AbstractServiceProvider {
     public function register()
     {
         $this->app['router'] = function ($app) {
-            return new Router($app);
+            return new Router(new Dispatcher($app));
         };
     }
 }

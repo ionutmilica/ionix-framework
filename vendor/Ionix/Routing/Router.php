@@ -17,15 +17,19 @@ class Router {
      */
 
     protected $collection;
-    /**
-     * @var App
-     */
-    protected $app;
 
-    public function __construct(App $app)
+    /**
+     * @var Dispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * @param Dispatcher $dispatcher
+     */
+    public function __construct(Dispatcher $dispatcher)
     {
-        $this->app = $app;
         $this->collection = new RouteCollection();
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -104,41 +108,7 @@ class Router {
         $callback = $route->getCallback();
         $data     = array_values($route->getData());
 
-        if (is_array($callback)) {
-            $reflClass = new \ReflectionClass($callback[0]);
-            $params = [];
-            $paramList = [];
-
-            if ($constuctor = $reflClass->getConstructor()) {
-                $params = $constuctor->getParameters();
-            }
-
-            foreach ($params as $param) {
-                $class = $param->getClass();
-                if ($class) {
-                    $paramList[] = $this->getFromContainer($this->app, $class->getName());
-                }
-            }
-
-            $callback[0] = $reflClass->newInstanceArgs($paramList);
-            // Injection on methods
-            $method = $reflClass->getMethod($callback[1]);
-
-            $params = $method->getParameters();
-            $paramList = [];
-            $i = 0;
-            foreach ($params as $param) {
-                $class = $param->getClass();
-                if ($class) {
-                    $paramList[] = $this->getFromContainer($this->app, $class->getName());
-                } else if (isset($data[$i])) {
-                    $paramList[] = $data[$i++];
-                }
-            }
-            return $method->invokeArgs($callback[0], $paramList);
-        }
-
-        return call_user_func_array($callback, $route->getData());
+        return $this->dispatcher->dispatch($callback, $data);
     }
 
     /**

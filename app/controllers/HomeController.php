@@ -5,7 +5,13 @@ use Ionix\Routing\Controller;
 
 class HomeController extends Controller {
 
-    public function index()
+    public function __construct(Test $test)
+    {
+        echo 'Yay !';
+        var_dump($test);
+    }
+
+    public function index(Test $test)
     {
         return Response::make('<h1>Hello world !</h1>');
     }
