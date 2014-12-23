@@ -4,7 +4,7 @@ use Ionix\Http\Response;
 use Ionix\Routing\Controller;
 
 class HomeController extends Controller {
-    
+
     public function index()
     {
         return Response::make('<h1>Hello world !</h1>');

@@ -106,8 +106,13 @@ class Router {
 
         if (is_array($callback)) {
             $reflClass = new \ReflectionClass($callback[0]);
-            $params = $reflClass->getConstructor()->getParameters();
+            $params = [];
             $paramList = [];
+
+            if ($constuctor = $reflClass->getConstructor()) {
+                $params = $constuctor->getParameters();
+            }
+
             foreach ($params as $param) {
                 $class = $param->getClass();
                 if ($class) {
