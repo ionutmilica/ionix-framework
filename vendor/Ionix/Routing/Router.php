@@ -93,6 +93,7 @@ class Router {
      *
      * @param Request $request
      * @return bool
+     * @throws \Exception
      */
     public function dispatch(Request $request)
     {
@@ -102,11 +103,15 @@ class Router {
         $route = $this->collection->find($method, $pathInfo);
 
         if ( ! $route) {
-            return false;
+            throw new \Exception('Route not found !');
         }
 
         $callback = $route->getCallback();
         $data     = array_values($route->getData());
+
+        if ( ! is_callable($callback)) {
+            throw new \Exception(sprintf('Class %s has no method %s !', $callback[0], $callback[1]));
+        }
 
         return $this->dispatcher->dispatch($callback, $data);
     }

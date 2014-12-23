@@ -11,23 +11,23 @@ class HomeController extends Controller {
         var_dump($test);
     }
 
-    public function index(Test $test)
+    public function index(Test $sd)
     {
         return Response::make('<h1>Hello world !</h1>');
     }
 
-    public function a($x, $y, $z)
+    public function a( $x, $y, $z)
     {
         var_dump($x, $y, $z);
     }
 
-    public function b($zz)
+    public function b(Test $mm, $zz)
     {
-        var_dump($zz);
+        var_dump($mm, $zz);
     }
 
-    public function c($t = null)
+    public function c(Test $zz, $t = null, Test $mm)
     {
-        var_dump($t);
+        var_dump($t, $mm);
     }
 }
