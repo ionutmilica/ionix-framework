@@ -50,6 +50,16 @@ class ParamBag implements \Countable {
     }
 
     /**
+     * Return all parameters
+     *
+     * @return array
+     */
+    public function all()
+    {
+        return $this->params;
+    }
+
+    /**
      * Count parameters
      *
      * @return int
