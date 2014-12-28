@@ -1,4 +1,4 @@
-<?php
+<?php namespace App\Controllers;
 
 use Ionix\Http\Response;
 use Ionix\Routing\Controller;
@@ -7,6 +7,8 @@ class HomeController extends Controller {
 
     public function index()
     {
+        $app = app('view');
+        return $app->make('test', [])->render();
         return Response::make('<h1>Hello world !</h1>');
     }
 

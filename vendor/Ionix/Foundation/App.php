@@ -47,7 +47,7 @@ class App extends Container {
 	 */
 	public function registerProviders()
 	{
-		$appConfig = $this['path.app'] . 'config/app.php';
+		$appConfig = $this['path.root'] . '/resources/config/app.php';
 
 		$app = require $appConfig;
 

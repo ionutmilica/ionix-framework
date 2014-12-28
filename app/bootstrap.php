@@ -9,11 +9,6 @@ $app->setPaths([
     'path.app'  => APP,
 ]);
 
-$app['loader']->addDirectories([
-    APP.'controllers',
-    APP.'models',
-]);
-
 $app->init();
 
 require 'routes.php';
