@@ -21,6 +21,22 @@ if ( ! function_exists('app')) {
     }
 }
 
+
+if ( ! function_exists('group'))
+{
+    /**
+     * Router group shortcut
+     *
+     * @param $data
+     * @param null $callback
+     * @return Ionix\Routing\Router
+     */
+    function group($data, $callback = null)
+    {
+        return app('router')->group($data, $callback);
+    }
+}
+
 if ( ! function_exists('get')) {
     /**
      * Create a new route for get method
