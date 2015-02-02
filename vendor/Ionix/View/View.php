@@ -1,8 +1,9 @@
 <?php namespace Ionix\View;
 
 use Exception;
+use Ionix\Support\Interfaces\Renderable;
 
-class View {
+class View implements Renderable {
 
     /**
      * @var

@@ -1,6 +1,7 @@
 <?php namespace Ionix\Http;
 
 use ArrayObject;
+use Ionix\Support\Interfaces\Renderable;
 
 class Response
 {
@@ -58,7 +59,9 @@ class Response
      */
     public function setContent($content)
     {
-        if ($this->shouldBeJson($content)) {
+        if ($content instanceof Renderable) {
+            $content = $content->render();
+        } else if ($this->shouldBeJson($content)) {
             $content = $this->toJson($content);
         }
 

@@ -7,9 +7,7 @@ class HomeController extends Controller {
 
     public function index()
     {
-        $app = app('view');
-        return $app->make('test', [])->render();
-        return Response::make('<h1>Hello world !</h1>');
+        return app('view')->make('test', []);
     }
 
     public function a( $x, $y, $z)
