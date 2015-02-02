@@ -7,13 +7,22 @@ get('/', 'App\Controllers\HomeController@index');
 
 $router = app('router');
 
-$router->group('test', function ($router) {
-    $router->group('bla', function ($router) {
-        $router->get('/bla', function () {
+$router->group('test', function ($router)
+{
+    $router->group('bla', function ()
+    {
+        get('/bla', function ()
+        {
             echo 'Bla !';
         });
-        $router->get('/tra', function () {
+        get('/tra', function ()
+        {
             echo 'Bla !';
         });
     });
+});
+
+$router->group('test2', function ()
+{
+
 });

@@ -96,14 +96,18 @@ class Router {
     {
         if (is_callable($data)) {
             $callback = $data;
-            $data = '';
+            $data = null;
         }
 
-        $this->prefix[] = $data;
+        if ($data) {
+            $this->prefix[] = $data;
+        }
 
         call_user_func($callback, $this);
 
-        array_pop($this->prefix);
+        if ($data) {
+            array_pop($this->prefix);
+        }
     }
 
     /**
