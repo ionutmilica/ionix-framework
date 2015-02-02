@@ -1,12 +1,12 @@
 <?php
 
-require ROOT.'vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $app = new Ionix\Foundation\App();
 
 $app->setPaths([
-    'path.root' => ROOT,
-    'path.app'  => APP,
+    'path.root' => __DIR__.'/../',
+    'path.app'  => __DIR__.'/',
 ]);
 
 $app->init();
