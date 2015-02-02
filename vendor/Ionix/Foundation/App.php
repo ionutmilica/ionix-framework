@@ -7,6 +7,16 @@ use Pimple\Container;
 class App extends Container {
 
 	/**
+	 * Framework codename
+	 */
+	const CODENAME = "IONIX";
+
+	/**
+	 * Framework version
+	 */
+	const VERSION = "Experimental";
+
+	/**
 	 * @var
 	 */
 	protected static $app;
@@ -62,13 +72,14 @@ class App extends Container {
 	public function run()
 	{
 		$request = Request::createFromGlobals();
+
 		$response = $this['router']->dispatch($request);
 
-		if (true == ($response instanceof Response)) {
-			$response->send();
-		} else {
-			(new Response($response))->send();
+		if (false == ($response instanceof Response)) {
+			$response = new Response($response);
 		}
+
+		$response->send();
 	}
 
 	/**
@@ -78,7 +89,7 @@ class App extends Container {
 	 */
 	public static function setApp(App $app)
 	{
-		self::$app= $app;
+		self::$app = $app;
 	}
 
 	/**

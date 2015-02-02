@@ -37,7 +37,7 @@ class Route {
      */
     public function __construct($name, $callback)
     {
-        $this->regex = $this->format = $name;
+        $this->regex = $this->format = $this->normalizeUri($name);
         $this->callback = $callback;
     }
 

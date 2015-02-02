@@ -15,13 +15,19 @@ class Router {
     /**
      * @var RouteCollection
      */
-
     protected $collection;
 
     /**
      * @var Dispatcher
      */
     private $dispatcher;
+
+    /**
+     * Route prefix
+     *
+     * @var array
+     */
+    private $prefix = [];
 
     /**
      * @param Dispatcher $dispatcher
@@ -41,10 +47,7 @@ class Router {
      */
     public function get($route, $callback)
     {
-        return $this->collection->addRoute(self::GET, new Route(
-            $route,
-            $callback
-        ));
+        return $this->addRoute(self::GET, $route, $callback);
     }
 
     /**
@@ -56,10 +59,7 @@ class Router {
      */
     public function post($route, $callback)
     {
-        return $this->collection->addRoute(self::POST, new Route(
-            $route,
-            $callback
-        ));
+        return $this->addRoute(self::POST, $route, $callback);
     }
 
     /**
@@ -71,11 +71,9 @@ class Router {
      */
     public function delete($route, $callback)
     {
-        return $this->collection->addRoute(self::DELETE, new Route(
-            $route,
-            $callback
-        ));
+        return $this->addRoute(self::DELETE, $route, $callback);
     }
+
 
     /**
      * Set a pattern to the routes
@@ -86,6 +84,26 @@ class Router {
     public function pattern($name, $value)
     {
         Route::pattern($name, $value);
+    }
+
+    /**
+     * Create group of routes
+     *
+     * @param $data
+     * @param null $callback
+     */
+    public function group($data, $callback = null)
+    {
+        if (is_callable($data)) {
+            $callback = $data;
+            $data = '';
+        }
+
+        $this->prefix[] = $data;
+
+        call_user_func($callback, $this);
+
+        array_pop($this->prefix);
     }
 
     /**
@@ -117,20 +135,33 @@ class Router {
     }
 
     /**
-     * Search in container for a specific type or create a new class.
-     * More validation to be done
+     * Add a route to the collection
      *
-     * @param App $app
-     * @param $type
-     * @return mixed
+     * @param $flag
+     * @param $route
+     * @param $callback
+     * @return Route
      */
-    public function getFromContainer(App $app, $type)
+    protected function addRoute($flag, $route, $callback)
     {
-        foreach ($app as $obj) {
-            if (($obj instanceof $type) !== false) {
-                return $obj;
-            }
-        }
-        return new $type;
+        $route = $this->preparePrefix($route);
+
+        return $this->collection->addRoute($flag, new Route(
+            $route,
+            $callback
+        ));
     }
+
+    /**
+     * Append the prefix parts
+     *
+     * @param $path
+     * @return string
+     */
+    protected function preparePrefix($path)
+    {
+        $path = implode('/',$this->prefix) . '/' . $path;
+        return str_replace('//', '/', $path);
+    }
+
 }
