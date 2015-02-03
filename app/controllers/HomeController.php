@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
-use Ionix\Foundation\App;
 use Ionix\Foundation\Config;
+use Ionix\Http\Request;
 use Ionix\Routing\Controller;
 
 class Wtf {
@@ -18,9 +18,10 @@ class HomeController extends Controller {
         var_dump($cfg->get('app'), $wtf);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $view = app('view')->make('test');
+        var_dump($request->query->get('demo'));
+        $view = view('test');
         $view->set('current_date', date('D-m-Y H:I'));
         return $view;
     }

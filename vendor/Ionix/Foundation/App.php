@@ -77,7 +77,7 @@ class App extends Container {
 	 */
 	public function run()
 	{
-		$request = Request::createFromGlobals();
+		$request = $this->createRequest();
 
 		$this->bootProviders();
 
@@ -127,5 +127,18 @@ class App extends Container {
 		{
 			$provider->boot();
 		}
+	}
+
+	/**
+	 * Create request from globals
+	 *
+	 * @return callable
+	 */
+	private function createRequest()
+	{
+		$this['Ionix\Http\Request'] = function () {
+			return Request::createFromGlobals();
+		};
+		return $this['Ionix\Http\Request'];
 	}
 }
