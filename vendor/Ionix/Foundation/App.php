@@ -28,9 +28,9 @@ class App extends Container {
 	 */
 	protected $providers = [];
 
-	public function __construct()
+	public function __construct(array $values = array())
 	{
-		parent::__construct();
+		parent::__construct($values);
 
 		$this->initDefaultClasses();
 	}
@@ -108,11 +108,14 @@ class App extends Container {
 		$this['loader'] = function ($app) {
 			return new ClassLoader();
 		};
-		$this['config'] = function ($app) {
+		$this['config'] = $config = function ($app) {
 			$config = new Config();
 			$config->addHint($app['path.root'] . '/resources/config/');
 			return $config;
 		};
+
+		$this['Ionix\Foundation\App'] = $this;
+		$this['Ionix\Foundation\Config'] = $config;
 	}
 
 	/**

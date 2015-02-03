@@ -1,10 +1,22 @@
 <?php namespace App\Controllers;
 
-use Ionix\Http\Response;
+use Ionix\Foundation\App;
+use Ionix\Foundation\Config;
 use Ionix\Routing\Controller;
-use Ionix\View\View;
+
+class Wtf {
+    public function __construct()
+    {
+        echo 'Hello from WTF !';
+    }
+}
 
 class HomeController extends Controller {
+
+    public function __construct(Config $cfg, Wtf $wtf)
+    {
+        var_dump($cfg->get('app'), $wtf);
+    }
 
     public function index()
     {
