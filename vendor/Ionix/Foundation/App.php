@@ -21,6 +21,13 @@ class App extends Container {
 	 */
 	protected static $app;
 
+	/**
+	 * Store every providers
+	 *
+	 * @var array
+	 */
+	protected $providers = [];
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -33,7 +40,7 @@ class App extends Container {
 	 */
 	public function init()
 	{
-		self::setApp($this);
+		self::$app = $this;
 
 		spl_autoload_register(array($this['loader'], 'load'));
 
@@ -57,12 +64,11 @@ class App extends Container {
 	 */
 	public function registerProviders()
 	{
-		$appConfig = $this['path.root'] . '/resources/config/app.php';
+		$providers = $this['config']->get('app.providers');
 
-		$app = require $appConfig;
-
-		foreach ($app['providers'] as $provider) {
-			(new $provider($this))->register();
+		foreach ($providers as $provider) {
+			$this->providers[$provider] = new $provider($this);
+			$this->providers[$provider]->register();
 		}
 	}
 
@@ -73,6 +79,8 @@ class App extends Container {
 	{
 		$request = Request::createFromGlobals();
 
+		$this->bootProviders();
+
 		$response = $this['router']->dispatch($request);
 
 		if (false == ($response instanceof Response)) {
@@ -80,16 +88,6 @@ class App extends Container {
 		}
 
 		$response->send();
-	}
-
-	/**
-	 * Store the app instance in a static context
-	 *
-	 * @param App $app
-	 */
-	public static function setApp(App $app)
-	{
-		self::$app = $app;
 	}
 
 	/**
@@ -110,5 +108,21 @@ class App extends Container {
 		$this['loader'] = function ($app) {
 			return new ClassLoader();
 		};
+		$this['config'] = function ($app) {
+			$config = new Config();
+			$config->addHint($app['path.root'] . '/resources/config/');
+			return $config;
+		};
+	}
+
+	/**
+	 * Call providers boot method
+	 */
+	private function bootProviders()
+	{
+		foreach ($this->providers as $provider)
+		{
+			$provider->boot();
+		}
 	}
 }

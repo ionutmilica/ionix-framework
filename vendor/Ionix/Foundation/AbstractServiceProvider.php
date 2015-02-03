@@ -16,6 +16,11 @@ abstract class AbstractServiceProvider {
     }
 
     /**
+     * Method that fires before the request routing
+     */
+    public function boot() {}
+
+    /**
      * Register the dependencies
      *
      * @return mixed
