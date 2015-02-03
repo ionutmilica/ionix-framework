@@ -4,13 +4,6 @@ use Ionix\Foundation\Config;
 use Ionix\Http\Request;
 use Ionix\Routing\Controller;
 
-class Wtf {
-    public function __construct()
-    {
-        echo 'Hello from WTF !';
-    }
-}
-
 class HomeController extends Controller {
 
     public function __construct(Config $cfg, Wtf $wtf)
