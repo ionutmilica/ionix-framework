@@ -6,8 +6,8 @@ It is a MVC framework heavily inspired by Laravel, a framework that I love (see 
 
 For the near future I plan to:
 
-- add new components but keeping the ideea of simplicity
-- incapsulate the framework in composer package
+- add new components but keeping the idea of simplicity
+- encapsulate the framework in composer package
 - add unit tests for the whole components
 - refactor current components
 - documenting the features
