@@ -1,9 +1,21 @@
 <?php namespace Ionix\Validation;
 
 class Factory {
+    /**
+     * @var Parser
+     */
+    private $parser;
 
-    public function make($data, $rules)
+    /**
+     * @param Parser $parser
+     */
+    public function __construct(Parser $parser)
     {
-        return new Validator($data, $rules);
+        $this->parser = $parser;
+    }
+
+    public function make(&$input, $rules)
+    {
+        return new Validator($this->parser, $input, $rules);
     }
 }

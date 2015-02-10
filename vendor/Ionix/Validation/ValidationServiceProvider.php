@@ -12,7 +12,7 @@ class ValidationServiceProvider extends AbstractServiceProvider {
     public function register()
     {
         $this->app['validation'] = function () {
-            return new Factory();
+            return new Factory(new Parser());
         };
     }
 }
