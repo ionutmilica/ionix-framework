@@ -10,9 +10,11 @@ class HomeController extends Controller {
     {
         $validator = $app['validation']->make($_GET, [
             'test' => 'required|boolean',
+            'onion' => 'required'
         ]);
 
         var_dump($validator->passes());
+        var_dump($validator->getMessage());
     }
 
     public function index(Request $request)

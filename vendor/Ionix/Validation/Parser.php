@@ -36,6 +36,7 @@ class Parser {
      */
     public function parse()
     {
+        $this->rules = [];
         $parts = explode('|', $this->command);
 
         foreach ($parts as $part) {

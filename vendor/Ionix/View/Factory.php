@@ -16,6 +16,13 @@ class Factory {
         $this->finder = $finder->addLocation($paths);
     }
 
+    /**
+     * Creates a new view object ready to use
+     *
+     * @param $view
+     * @param array $data
+     * @return View
+     */
     public function make($view, array $data = [])
     {
         return new View($this->finder->find($view), $view, $data);

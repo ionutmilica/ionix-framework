@@ -12,7 +12,7 @@ class ViewServiceProvider extends AbstractServiceProvider {
      */
     public function register()
     {
-        $this->app['view.finder'] = function ($app)
+        $this->app['view.finder'] = function ()
         {
             return new ViewFinder();
         };

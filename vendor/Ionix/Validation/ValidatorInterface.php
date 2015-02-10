@@ -3,6 +3,14 @@
 interface ValidatorInterface {
 
     /**
+     * Get error messages after validation fails
+     *
+     * @param null $inputName
+     * @return array
+     */
+    public function getMessage($inputName = null);
+
+    /**
      * Check if a given input passes validation tests
      *
      * @return mixed

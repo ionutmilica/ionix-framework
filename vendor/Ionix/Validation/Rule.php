@@ -59,6 +59,8 @@ abstract class Rule {
         $this->input[$this->inputName] = $value;
     }
 
+    public function getMessage() { return null; }
+
     /**
      * Validate the rule against the value
      *

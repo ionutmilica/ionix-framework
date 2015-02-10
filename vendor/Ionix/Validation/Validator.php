@@ -3,10 +3,17 @@
 class Validator implements ValidatorInterface {
 
     /**
+     * User input - We keep an reference to it in the case of
+     * modifications that can occur in some rules.
+     * Ex: trim - will trim the input and change to the new value
+     *
      * @var
      */
     private $input;
+
     /**
+     * Rules provided by user to be validated against the input
+     *
      * @var
      */
     private $userRules;
@@ -20,10 +27,38 @@ class Validator implements ValidatorInterface {
         'required' => 'Ionix\Validation\Rules\RequiredRule',
         'boolean' => 'Ionix\Validation\Rules\BooleanRule',
     ];
+
     /**
+     * Parser used to parse rules
+     *
      * @var Parser
      */
     private $parser;
+
+    /**
+     * Holds validation state
+     *
+     * @var bool
+     */
+    private $isValid = true;
+
+    /**
+     * Error messages after validation fails
+     *
+     * @var array
+     */
+    private $messages = [];
+
+    /**
+     * Create new rule for the validator
+     *
+     * @param $rule
+     * @param $class
+     */
+    public static function extend($rule, $class)
+    {
+        self::$rules[$rule] = $class;
+    }
 
     /**
      * @param Parser $parser
@@ -38,59 +73,64 @@ class Validator implements ValidatorInterface {
     }
 
     /**
-     * Create new rule for the validator
+     * Get error messages after validation fails
      *
-     * @param $rule
-     * @param $class
+     * @param null $inputName
+     * @return array
      */
-    public static function extend($rule, $class)
+    public function getMessage($inputName = null)
     {
-        self::$rules[$rule] = $class;
-    }
-
-    public function validateRule($inputName, $rules)
-    {
-        $result = [];
-        $isValid = true;
-
-        foreach ($rules as $rule) {
-            $ruleName = $rule['name'];
-            if (isset(self::$rules[$ruleName])) {
-                $ruleObj = new self::$rules[$ruleName]($this->input, $inputName, $rule['args']);
-                $isValid = $this->trueFalse($isValid, $ruleObj->validate());
-                //$result[$ruleName] = $ruleObj->validate();
-            }
-        }
-
-        return $isValid;
-    }
-
-
-    public function passes()
-    {
-        $isValid = true;
-
-        foreach ($this->userRules as $inputName => $userRule) {
-            $rules = $this->parser->setCommand($userRule)->parse();
-            $isValid = $this->trueFalse($isValid, $this->validateRule($inputName, $rules));
-        }
-
-        return $isValid;
+        return $this->messages;
     }
 
     /**
-     * Helper for flag setting
+     * Check if the given input is valid under the specified rules
      *
-     * @param $value
-     * @param $newValue
      * @return bool
      */
-    private function trueFalse($value, $newValue)
+    public function passes()
     {
-        if ($value == false) {
-            return false;
+        foreach ($this->userRules as $inputName => $userRule) {
+            $rules = $this->parser->setCommand($userRule)->parse();
+            $this->validateInput($inputName, $rules);
         }
 
-        return $newValue;
+        return $this->isValid;
+    }
+
+    /**
+     * Validates the input for a specific group of rules
+     *
+     * @param $inputName
+     * @param $rules
+     * @return bool
+     * @throws \Exception
+     */
+    public function validateInput($inputName, $rules)
+    {
+        foreach ($rules as $rule) {
+            $this->validateRule($rule, $inputName);
+        }
+    }
+
+    /**
+     * @param $rule
+     * @param $inputName
+     * @throws \Exception
+     */
+    private function validateRule($rule, $inputName)
+    {
+        $ruleName = $rule['name'];
+
+        if ( ! isset(self::$rules[$ruleName])) {
+            throw new \Exception(sprintf('Undefined rule `%s` for the validator !', $ruleName));
+        }
+
+        $ruleObject = new self::$rules[$ruleName]($this->input, $inputName, $rule['args']);
+
+        if ( ! $ruleObject->validate()) {
+            $this->isValid = false;
+            $this->messages[$inputName][] = $ruleObject->getMessage();
+        }
     }
 }
