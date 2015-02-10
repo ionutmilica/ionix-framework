@@ -19,7 +19,7 @@ class ViewServiceProvider extends AbstractServiceProvider {
 
         $this->app['view'] = function ($app)
         {
-            return new Factory($app['view.finder'], $app['path.root']);
+            return new Factory($app['view.finder'], $app['config']->get('view.paths'));
         };
     }
 }

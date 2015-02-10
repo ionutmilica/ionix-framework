@@ -2,7 +2,6 @@
 
 class Factory {
 
-    protected $configPath;
     /**
      * @var ViewFinder
      */
@@ -10,21 +9,11 @@ class Factory {
 
     /**
      * @param ViewFinder $finder
-     * @param $configPath
+     * @param array $paths
      */
-    public function __construct(ViewFinder $finder, $configPath)
+    public function __construct(ViewFinder $finder, array $paths = [])
     {
-        $this->configPath = $configPath;
-        $this->finder = $finder;
-
-        $this->initFinder();
-    }
-
-    protected function initFinder()
-    {
-        $config = require $this->configPath . '/resources/config/view.php';
-
-        $this->finder->addLocation($config['paths']);
+        $this->finder = $finder->addLocation($paths);
     }
 
     public function make($view, array $data = [])
