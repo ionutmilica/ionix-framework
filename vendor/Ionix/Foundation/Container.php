@@ -112,7 +112,7 @@ class Container implements ArrayAccess {
     public function make($abstract, $args = [])
     {
         $abstract = isset($this->aliases[$abstract]) ? $this->aliases[$abstract] : $abstract;
-
+var_dump($abstract);
         if (isset($this->instances[$abstract]))
         {
             return $this->instances[$abstract];
@@ -219,7 +219,7 @@ class Container implements ArrayAccess {
         foreach ($params as $param)
         {
             if ($class = $param->getClass()) {
-                $resolvedParams[] = $this->build($class->getName());
+                $resolvedParams[] = $this->make($class->getName());
             } else if (isset($primitives[$i])) {
                 $resolvedParams[] = $primitives[$i++];
             }

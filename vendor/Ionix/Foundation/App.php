@@ -104,16 +104,17 @@ class App extends Container {
 	 */
 	private function initDefaultClasses()
 	{
-		$this['loader'] = function ($app) {
+		$this['loader'] = $this->share(function ($app) {
 			return new ClassLoader();
-		};
-		$this['config'] = $config = function ($app) {
+		});
+
+		$this['config'] = $this->share(function ($app) {
 			$config = new Config();
 			$config->addHint($app['path.root'] . '/resources/config/');
 			return $config;
-		};
+		});
 
-		$this['app'] = $this;
+		$this->instance('app', $this);
 	}
 
 	/**
