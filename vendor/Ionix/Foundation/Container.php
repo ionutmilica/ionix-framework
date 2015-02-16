@@ -112,7 +112,7 @@ class Container implements ArrayAccess {
     public function make($abstract, $args = [])
     {
         $abstract = isset($this->aliases[$abstract]) ? $this->aliases[$abstract] : $abstract;
-var_dump($abstract);
+
         if (isset($this->instances[$abstract]))
         {
             return $this->instances[$abstract];
