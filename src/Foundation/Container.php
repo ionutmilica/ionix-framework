@@ -113,8 +113,7 @@ class Container implements ArrayAccess {
     {
         $abstract = isset($this->aliases[$abstract]) ? $this->aliases[$abstract] : $abstract;
 
-        if (isset($this->instances[$abstract]))
-        {
+        if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
         }
 
@@ -216,8 +215,7 @@ class Container implements ArrayAccess {
 
         $resolvedParams = [];
         $i = 0;
-        foreach ($params as $param)
-        {
+        foreach ($params as $param) {
             if ($class = $param->getClass()) {
                 $resolvedParams[] = $this->make($class->getName());
             } else if (isset($primitives[$i])) {
@@ -236,12 +234,9 @@ class Container implements ArrayAccess {
      */
     public function isShared($abstract)
     {
-        if (isset($this->bindings[$abstract]['shared']))
-        {
+        if (isset($this->bindings[$abstract]['shared'])) {
             $shared = $this->bindings[$abstract]['shared'];
-        }
-        else
-        {
+        } else {
             $shared = false;
         }
         return isset($this->instances[$abstract]) || $shared === true;
@@ -277,10 +272,8 @@ class Container implements ArrayAccess {
      */
     public function offsetSet($offset, $value)
     {
-        if ( ! $value instanceof Closure)
-        {
-            $value = function() use ($value)
-            {
+        if ( ! $value instanceof Closure) {
+            $value = function() use ($value) {
                 return $value;
             };
         }

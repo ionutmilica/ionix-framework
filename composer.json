@@ -16,11 +16,11 @@
   },
   "autoload": {
     "psr-4": {
-      "App\\" : "app/",
-      "Ionix\\": "vendor/Ionix/"
+      "Ionix\\": "src/"
     },
     "files": [
-      "vendor/Ionix/Foundation/helpers.php"
+      "src/Foundation/helpers.php"
     ]
-  }
+  },
+  "minimum-stability": "dev"
 }
