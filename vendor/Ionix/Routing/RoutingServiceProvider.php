@@ -12,8 +12,8 @@ class RoutingServiceProvider extends AbstractServiceProvider {
      */
     public function register()
     {
-        $this->app['router'] = function ($app) {
+        $this->app['router'] = $this->app->share(function ($app) {
             return new Router(new Dispatcher($app));
-        };
+        });
     }
 }

@@ -22,9 +22,16 @@ class Factory {
      * @param $view
      * @param array $data
      * @return View
+     * @throws \Exception
      */
     public function make($view, array $data = [])
     {
-        return new View($this->finder->find($view), $view, $data);
+        $location = $this->finder->find($view);
+
+        if ( ! $location) {
+            throw new \Exception(sprintf('View `%s` cannot be found!', $view));
+        }
+
+        return new View($location, $view, $data);
     }
 }

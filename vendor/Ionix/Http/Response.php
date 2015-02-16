@@ -49,6 +49,7 @@ class Response
      */
     public static function make($content, $status = 200, $headers = [])
     {
+        var_dump($content);
         return new static($content, $status, $headers);
     }
 

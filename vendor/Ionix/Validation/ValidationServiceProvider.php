@@ -11,8 +11,8 @@ class ValidationServiceProvider extends AbstractServiceProvider {
      */
     public function register()
     {
-        $this->app['validation'] = function () {
+        $this->app['validation'] = $this->app->share(function () {
             return new Factory(new Parser());
-        };
+        });
     }
 }

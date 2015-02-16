@@ -132,7 +132,7 @@ class Router {
         $data     = array_values($route->getData());
 
         if ( ! is_callable($callback)) {
-            throw new \Exception(sprintf('Class %s has no method %s !', $callback[0], $callback[1]));
+            throw new \Exception(sprintf('%s::%s does not exist!', $callback[0], $callback[1]));
         }
 
         return $this->dispatcher->dispatch($callback, $data);

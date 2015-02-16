@@ -27,10 +27,8 @@ class App extends Container {
 	 */
 	protected $providers = [];
 
-	public function __construct(array $values = array())
+	public function __construct()
 	{
-		parent::__construct($values);
-
 		$this->initDefaultClasses();
 	}
 
@@ -77,10 +75,12 @@ class App extends Container {
 	 */
 	public function run()
 	{
-		$request = $this->createRequest();
+		$request = Request::createFromGlobals();
+		$this->instance('request', $request);
+
 		$this->bootProviders();
 
-		$response = $this['router']->dispatch($request);
+		$response = $this['router']->dispatch($this['request']);
 
 		if (false == ($response instanceof Response)) {
 			$response = new Response($response);
@@ -112,6 +112,7 @@ class App extends Container {
 			$config->addHint($app['path.root'] . '/resources/config/');
 			return $config;
 		};
+
 		$this['app'] = $this;
 	}
 
@@ -144,18 +145,4 @@ class App extends Container {
 		}
 	}
 
-	/**
-	 * Create request from globals
-	 *
-	 * @return callable
-	 */
-	private function createRequest()
-	{
-		$this['request'] = function () {
-			return Request::createFromGlobals();
-		};
-		$request = $this['request'];
-
-		return $request;
-	}
 }
