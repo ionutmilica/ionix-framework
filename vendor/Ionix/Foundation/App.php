@@ -2,7 +2,6 @@
 
 use Ionix\Http\Request;
 use Ionix\Http\Response;
-use Pimple\Container;
 
 class App extends Container {
 
@@ -45,6 +44,7 @@ class App extends Container {
 		spl_autoload_register(array($this['loader'], 'load'));
 
 		$this->registerProviders();
+		$this->registerAliases();
 	}
 
 	/**
@@ -78,7 +78,6 @@ class App extends Container {
 	public function run()
 	{
 		$request = $this->createRequest();
-
 		$this->bootProviders();
 
 		$response = $this['router']->dispatch($request);
@@ -113,9 +112,7 @@ class App extends Container {
 			$config->addHint($app['path.root'] . '/resources/config/');
 			return $config;
 		};
-
-		$this['Ionix\Foundation\App'] = $this;
-		$this['Ionix\Foundation\Config'] = $config;
+		$this['app'] = $this;
 	}
 
 	/**
@@ -130,15 +127,35 @@ class App extends Container {
 	}
 
 	/**
+	 * Register aliases for all the registered classes
+	 */
+	private function registerAliases()
+	{
+		$aliases = [
+			'app' => 'Ionix\Foundation\App',
+			'config' => 'Ionix\Foundation\Config',
+			'router' => 'Ionix\Routing\Router',
+			'validation' => 'Ionix\Validation\Factory',
+			'request' => 'Ionix\Http\Request',
+		];
+
+		foreach ($aliases as $class => $alias) {
+			$this->alias($class, $alias);
+		}
+	}
+
+	/**
 	 * Create request from globals
 	 *
 	 * @return callable
 	 */
 	private function createRequest()
 	{
-		$this['Ionix\Http\Request'] = function () {
+		$this['request'] = function () {
 			return Request::createFromGlobals();
 		};
-		return $this['Ionix\Http\Request'];
+		$request = $this['request'];
+
+		return $request;
 	}
 }
