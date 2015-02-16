@@ -47,11 +47,15 @@ class Container implements ArrayAccess {
      * @param $concrete
      * @param bool $shared
      */
-    public function bind($abstract, $concrete, $shared = false)
+    public function bind($abstract, $concrete = null, $shared = false)
     {
-        if (($concrete instanceof Closure) == false) {
+        if ($concrete == null) {
+            $concrete = $abstract;
+        }
+
+        if ( ! ($concrete instanceof Closure)) {
             $concrete = function ($container, $args = []) use ($abstract, $concrete) {
-                $method = $abstract == $concrete ? 'build' : 'make';
+                $method = ($abstract == $concrete || is_object($concrete)) ? 'build' : 'make';
                 return $container->$method($concrete, $args);
             };
         }
@@ -60,6 +64,31 @@ class Container implements ArrayAccess {
             'concrete' => $concrete,
             'shared' => $shared
         ];
+    }
+
+    /**
+     * Bind a shared closure
+     *
+     * @param $abstract
+     * @param callable $closure
+     */
+    public function bindShared($abstract, Closure $closure)
+    {
+        $this->bind($abstract, $this->share($closure), true);
+    }
+
+    /**
+     * Register a binding if it was not registered already
+     *
+     * @param $abstract
+     * @param $concrete
+     * @param bool $shared
+     */
+    public function bindIf($abstract, $concrete, $shared = false)
+    {
+        if ( ! isset($this->bindings[$abstract]) && ! isset($this->instances[$abstract])) {
+            $this->bind($abstract, $concrete, $shared);
+        }
     }
 
     /**
@@ -240,6 +269,16 @@ class Container implements ArrayAccess {
             $shared = false;
         }
         return isset($this->instances[$abstract]) || $shared === true;
+    }
+
+    /**
+     *  Clear container bindings
+     */
+    public function clear()
+    {
+        $this->instances = [];
+        $this->aliases = [];
+        $this->bindings = [];
     }
 
     /**
