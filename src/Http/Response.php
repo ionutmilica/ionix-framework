@@ -34,7 +34,7 @@ class Response
      */
     public function __construct($content = '', $status = 200, $headers = [])
     {
-        $this->setContent($content);
+        $this->content = $content;
         $this->setStatusCode($status);
         $this->headers = new ParamBag($headers);
     }
@@ -49,24 +49,25 @@ class Response
      */
     public static function make($content, $status = 200, $headers = [])
     {
-        var_dump($content);
         return new static($content, $status, $headers);
     }
 
     /**
-     * Set a new conent
+     * Prepare content to be printed out
      *
-     * @param $content
+     * @return string
      */
-    public function setContent($content)
+    public function prepareContent()
     {
+        $content = $this->content;
+
         if ($content instanceof Renderable) {
             $content = $content->render();
         } else if ($this->shouldBeJson($content)) {
             $content = $this->toJson($content);
         }
 
-        $this->content = $content;
+        return $content;
     }
 
     /**
@@ -120,6 +121,6 @@ class Response
             $this->sendHeaders();
         }
         http_response_code($this->status);
-        echo $this->content;
+        echo $this->prepareContent($this->content);
     }
 }
