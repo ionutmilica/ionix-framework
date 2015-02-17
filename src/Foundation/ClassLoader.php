@@ -18,7 +18,6 @@ class ClassLoader {
         $this->directories = array_unique(array_merge($this->directories, $directories));
     }
 
-
     /**
      * Search and load a specific class. Used for auto-loader.
      *

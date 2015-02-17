@@ -88,9 +88,14 @@ class Request {
     public function getPathInfo()
     {
         if ($this->pathInfo == null) {
-            $this->pathInfo = $this->server->get('PATH_INFO') ?: '/';
+            if ($this->server->get('PATH_INFO')) {
+                $this->pathInfo = $this->server->get('PATH_INFO');
+            } else {
+                $query = $this->server->get('QUERY_STRING');
+                $uri = $this->server->get('REQUEST_URI');
+                $this->pathInfo = rtrim(str_replace('?'.$query, '', $uri), '/');
+            }
         }
-
         return $this->pathInfo;
     }
 

@@ -12,7 +12,7 @@ class ParamBag implements \Countable {
      */
     public function __construct(array $params)
     {
-        $this->params = $params;
+        $this->params =& $params;
     }
 
     /**
