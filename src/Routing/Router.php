@@ -1,16 +1,8 @@
 <?php namespace Ionix\Routing;
 
-use Ionix\Foundation\App;
 use Ionix\Http\Request;
-use Ionix\Http\Response;
 
 class Router {
-
-    const GET = 'GET';
-    const POST = 'POST';
-    const PUT = 'PUT';
-    const PATCH = 'PATCH';
-    const DELETE = 'DELETE';
 
     /**
      * @var RouteCollection
@@ -18,7 +10,7 @@ class Router {
     protected $collection;
 
     /**
-     * @var Dispatcher
+     * @var ControllerDispatcher
      */
     private $dispatcher;
 
@@ -30,9 +22,9 @@ class Router {
     private $prefix = [];
 
     /**
-     * @param Dispatcher $dispatcher
+     * @param ControllerDispatcher $dispatcher
      */
-    public function __construct(Dispatcher $dispatcher)
+    public function __construct(ControllerDispatcher $dispatcher)
     {
         $this->collection = new RouteCollection();
         $this->dispatcher = $dispatcher;
@@ -47,7 +39,7 @@ class Router {
      */
     public function get($route, $callback)
     {
-        return $this->addRoute(self::GET, $route, $callback);
+        return $this->addRoute('GET', $route, $callback);
     }
 
     /**
@@ -59,7 +51,7 @@ class Router {
      */
     public function post($route, $callback)
     {
-        return $this->addRoute(self::POST, $route, $callback);
+        return $this->addRoute('POST', $route, $callback);
     }
 
     /**
@@ -71,7 +63,7 @@ class Router {
      */
     public function delete($route, $callback)
     {
-        return $this->addRoute(self::DELETE, $route, $callback);
+        return $this->addRoute('DELETE', $route, $callback);
     }
 
 
@@ -128,14 +120,7 @@ class Router {
             throw new \Exception('Route not found !');
         }
 
-        $callback = $route->getCallback();
-        $data     = array_values($route->getData());
-
-        if ( ! is_callable($callback)) {
-            throw new \Exception(sprintf('%s::%s does not exist!', $callback[0], $callback[1]));
-        }
-
-        return $this->dispatcher->dispatch($callback, $data);
+        return $this->dispatcher->dispatch($route);
     }
 
     /**

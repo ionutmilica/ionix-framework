@@ -208,7 +208,6 @@ class Container implements ArrayAccess {
         }
 
         $reflectionMethod = new ReflectionMethod($class, $method);
-
         $dependencies = $this->getMethodDependencies($reflectionMethod, $args);
 
         return $reflectionMethod->invokeArgs($class, $dependencies);
@@ -224,7 +223,6 @@ class Container implements ArrayAccess {
     public function resolveClosure(Closure $closure, array $args = [])
     {
         $closureRef = new ReflectionFunction($closure);
-
         $dependencies = $this->getMethodDependencies($closureRef, $args);
 
         return $closureRef->invokeArgs($dependencies);
