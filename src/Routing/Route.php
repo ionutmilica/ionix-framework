@@ -89,12 +89,17 @@ class Route {
     }
 
     /**
+     * Add a filter to the route parameter
+     *
      * @param $name
      * @param $regex
+     * @return $this
      */
     public function where($name, $regex)
     {
         $this->wheres[$name] = $regex;
+
+        return $this;
     }
 
     /**
@@ -174,7 +179,7 @@ class Route {
             return $this->callback;
         }
 
-        return $this->resolveCallback($this->callback);
+        return explode('@', $this->callback);
     }
 
     /**
@@ -185,25 +190,6 @@ class Route {
     public function getData()
     {
         return $this->data;
-    }
-
-    /**
-     * Resolve a string as a callback
-     *
-     * @param $callback
-     * @return array
-     */
-    protected function resolveCallback($callback)
-    {
-        if (stripos($callback, '@') !== false) {
-            list($controller, $action) = explode('@', $callback);
-            return [
-                $controller,
-                $action
-            ];
-        }
-
-        return $callback;
     }
 
 }
