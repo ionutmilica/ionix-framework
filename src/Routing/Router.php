@@ -119,7 +119,7 @@ class Router {
      */
     public function dispatch(Request $request)
     {
-        $pathInfo = rtrim($request->getPathInfo(), '/');
+        $pathInfo = $request->getPathInfo();
         $method   = $request->getMethod();
 
         $route = $this->collection->find($method, $pathInfo);

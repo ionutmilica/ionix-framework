@@ -26,6 +26,20 @@ class Validator implements ValidatorInterface {
     private static $rules = [
         'required' => 'Ionix\Validation\Rules\RequiredRule',
         'boolean' => 'Ionix\Validation\Rules\BooleanRule',
+        'min' => 'Ionix\Validation\Rules\MinRule',
+        'max' => 'Ionix\Validation\Rules\MaxRule',
+        'between' => 'Ionix\Validation\Rules\BetweenRule',
+        'url' => 'Ionix\Validation\Rules\UrlRule',
+        'email' => 'Ionix\Validation\Rules\EmailRule',
+        'date' => 'Ionix\Validation\Rules\DateRule',
+        'confirmed' => 'Ionix\Validation\Rules\ConfirmedRule',
+        'in' => 'Ionix\Validation\Rules\InRule',
+        'same' => 'Ionix\Validation\Rules\SameRule',
+        'numeric' => 'Ionix\Validation\Rules\NumericRule',
+        'string' => 'Ionix\Validation\Rules\StringRule',
+        'alpha' => 'Ionix\Validation\Rules\AlphaRule',
+        'alpha_num' => 'Ionix\Validation\Rules\AlphaNumRule',
+        'alpha_dash' => 'Ionix\Validation\Rules\AlphaDashRule',
     ];
 
     /**
@@ -78,7 +92,7 @@ class Validator implements ValidatorInterface {
      * @param null $inputName
      * @return array
      */
-    public function getMessage($inputName = null)
+    public function getErrors($inputName = null)
     {
         return $this->messages;
     }
@@ -132,5 +146,7 @@ class Validator implements ValidatorInterface {
             $this->isValid = false;
             $this->messages[$inputName][] = $ruleObject->getMessage();
         }
+
+        $ruleObject = null;
     }
 }

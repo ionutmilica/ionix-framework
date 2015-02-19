@@ -2,8 +2,18 @@
 
 class Parser {
 
+    /**
+     *
+     *
+     * @var
+     */
     private $command;
 
+    /**
+     * Generated rules
+     *
+     * @var array
+     */
     private $rules = [];
 
     /**

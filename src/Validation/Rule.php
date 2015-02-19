@@ -24,15 +24,28 @@ abstract class Rule {
     protected $inputName;
 
     /**
+     * Rule used to set the expected amount of args
+     *
+     * @var int
+     */
+    protected $expect  = 0;
+
+    /**
      * @param $input
      * @param $inputName
-     * @param $args
+     * @param array $args
+     * @throws \Exception
      */
-    public function __construct(&$input, $inputName, $args)
+    public function __construct(&$input, $inputName, array $args)
     {
         $this->input = $input;
         $this->args = $args;
         $this->inputName = $inputName;
+
+        if (count($args) < $this->expect) {
+            throw new \Exception(sprintf('Rule `%s` expected %d arguments !', $this->inputName,
+                $this->expect));
+        }
     }
 
     /**
@@ -47,6 +60,21 @@ abstract class Rule {
         }
 
         return $this->input[$this->inputName];
+    }
+
+    /**
+     * Get arg or args
+     *
+     * @param null $pos
+     * @return array
+     */
+    public function getArg($pos = null)
+    {
+        if ($pos === null) {
+            return $this->args;
+        }
+
+        return isset($this->args[$pos]) ? $this->args[$pos] : $this->args;
     }
 
     /**

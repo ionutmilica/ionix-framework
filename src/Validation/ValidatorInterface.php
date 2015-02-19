@@ -8,7 +8,7 @@ interface ValidatorInterface {
      * @param null $inputName
      * @return array
      */
-    public function getMessage($inputName = null);
+    public function getErrors($inputName = null);
 
     /**
      * Check if a given input passes validation tests

@@ -14,5 +14,7 @@ class ValidationServiceProvider extends AbstractServiceProvider {
         $this->app['validation'] = $this->app->share(function () {
             return new Factory(new Parser());
         });
+
+        $this->app->alias('validation', 'Ionix\Validation\Factory');
     }
 }

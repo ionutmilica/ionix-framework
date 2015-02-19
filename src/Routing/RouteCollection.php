@@ -2,7 +2,10 @@
 
 class RouteCollection {
 
-    private $routes = [];
+    /**
+     * @var array
+     */
+    protected $routes = [];
 
     /**
      * Add route to the collection
