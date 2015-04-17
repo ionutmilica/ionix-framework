@@ -65,7 +65,6 @@ class Request {
         $this->cookie = new ParamBag($cookie);
         $this->files = new ParamBag($files);
         $this->server = new ParamBag($server);
-
         $this->method = null;
         $this->pathInfo = null;
     }
@@ -91,12 +90,40 @@ class Request {
             if ($this->server->get('PATH_INFO')) {
                 $this->pathInfo = $this->server->get('PATH_INFO');
             } else {
-                $query = $this->server->get('QUERY_STRING');
-                $uri = $this->server->get('REQUEST_URI');
+                $query = $this->getQueryString();
+                $uri = $this->getUri();
                 $this->pathInfo = rtrim(str_replace('?'.$query, '', $uri), '/');
             }
         }
         return $this->pathInfo;
+    }
+
+    /**
+     * Get request query string
+     *
+     * @return string
+     */
+    public function getQueryString()
+    {
+        return $this->server->get('QUERY_STRING');
+    }
+
+    /**
+     * Get request uri
+     *
+     * @return string
+     */
+    public function getUri()
+    {
+        return $this->server->get('REQUEST_URI');
+    }
+
+    /**
+     * Get server protocol
+     */
+    public function getProtocol()
+    {
+        return $this->server->get('SERVER_PROTOCOL');
     }
 
     /**

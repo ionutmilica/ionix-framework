@@ -27,7 +27,7 @@ class ControllerDispatcher {
     public function dispatch(Route $route)
     {
         $callback = $route->getCallback();
-        $params     = array_values($route->getData());
+        $params = array_values($route->getData());
 
         if ($callback instanceof Closure) {
             return $this->container->resolveClosure($callback, $params);
